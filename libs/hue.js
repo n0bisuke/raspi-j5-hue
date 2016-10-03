@@ -1,55 +1,28 @@
+/**
+ * Hueへの投稿共通化
+ */
+
 'use strict'
 
-const http = require(`http`);
 const config = require('../config');
-const HOST = config.hue.ip;
-const USER = config.hue.user;
-const LIGHT_ID = config.hue.id;
-const PATH = `/api/${USER}/lights/${LIGHT_ID}/state`;
-const debugFlag = config.flag.debug;
+const httpReq = require('./httpReq');
 
-function putHue(v){
-    log(`${typeof(v)}:${v}`);
-
+module.exports = (v) => {
     let postData = {};
     if(v == 0){
         postData = {"on":false};
     }else{
         postData = {"on":true};
     }
-
-    let postDataStr = JSON.stringify(postData);
     let options = {
-        host: HOST,
+        host: config.hue.ip,
         port: 80,
-        path: PATH,
+        path: `/api/${config.hue.user}/lights/${config.hue.id}/state`,
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
-            'Content-Length': postDataStr.length
+            'Content-Length': JSON.stringify(postData).length
         }
     };
-
-    let req = http.request(options, (res) => {
-        log('STATUS: ' + res.statusCode);
-        log('HEADERS: ' + JSON.stringify(res.headers));
-        res.setEncoding('utf8');
-        res.on('data', (chunk) => {
-            log('BODY: ' + chunk);
-        });
-    });
-    
-    req.on('error', (e) => {
-        log('problem with request: ' + e.message);
-    });
-    
-    req.write(postDataStr);
-    req.end();
+    httpReq(postData, options);
 }
-
-function log(v){
-    if(debugFlag === 'off')return;
-    console.log(v);
-}
-
-module.exports = putHue;
