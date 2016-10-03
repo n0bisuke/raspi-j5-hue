@@ -18,7 +18,7 @@ function getLocalAddress() {
                         ifacesObj.ipv4.push({name:dev, address:details.address});
                         let postData = {
                             "color": "yellow",
-                            "message": `${os.hostname()}: ${details.address}`,
+                            "message": `${os.hostname()}: ${details.address} (standup)`,
                             "notify": false,
                             "message_format":"text"
                         };
