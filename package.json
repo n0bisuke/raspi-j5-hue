@@ -1,0 +1,24 @@
+{
+  "name": "ipnode",
+  "version": "1.0.0",
+  "description": "``` sudo vim /etc/rc.local ```",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/n0bisuke/raspi-j5-hue.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/n0bisuke/raspi-j5-hue/issues"
+  },
+  "homepage": "https://github.com/n0bisuke/raspi-j5-hue#readme",
+  "dependencies": {
+    "raspi-io": "^6.1.0",
+    "johnny-five": "^0.10.1"
+  }
+}
