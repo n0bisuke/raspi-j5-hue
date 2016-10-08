@@ -2,34 +2,20 @@
 
 const os = require('os');
 const hcPost = require('./libs/hcPost');
-console.log(getLocalAddress());
+let interfaces = os.networkInterfaces();
+let mes = '';
 
-function getLocalAddress() {
-    var ifacesObj = {}
-    ifacesObj.ipv4 = [];
-    ifacesObj.ipv6 = [];
-    var interfaces = os.networkInterfaces();
+for (let dev in interfaces) {
+    interfaces[dev].forEach((details) => {
+        if (details.internal || details.family !== 'IPv4') return;
 
-    for (var dev in interfaces) {
-        interfaces[dev].forEach(function(details){
-            if (!details.internal){
-                switch(details.family){
-                    case "IPv4":
-                        ifacesObj.ipv4.push({name:dev, address:details.address});
-                        let postData = {
-                            "color": "yellow",
-                            "message": `${os.hostname()}: ${details.address} (standup)`,
-                            "notify": false,
-                            "message_format":"text"
-                        };
-                        hcPost(postData);
-                    break;
-                    case "IPv6":
-                        ifacesObj.ipv6.push({name:dev, address:details.address})
-                    break;
-                }
-            }
-        });
-    }
-    return ifacesObj;
-};
+        mes = `${os.hostname()}:${details.address} (standup)`;
+        let postData = {
+            "color": "yellow",
+            "message": mes,
+            "notify": false,
+            "message_format":"text"
+        };
+        hcPost(postData);
+    });
+}
